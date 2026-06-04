@@ -1,0 +1,23 @@
+# ===  Secrets & credentials — NEVER commit  ===
+# Service-account keys and any downloaded credentials are live secrets.
+.env
+.env.*
+*-key.json
+*_key.json
+*-credentials.json
+*credentials*.json
+service-account*.json
+sa-key*.json
+application_default_credentials.json
+keys/
+secrets/
+
+# ===  OS / editor  ===
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# ===  Logs / scratch  ===
+*.log
+tmp/
