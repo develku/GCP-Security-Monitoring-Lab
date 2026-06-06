@@ -42,7 +42,16 @@ TIMESTAMP                       PRINCIPAL_EMAIL        METHOD_NAME
 ```
 
 ✅ If you see a table → logging works. Continue.
-❌ Empty / error → confirm the active project: `gcloud config get-value project` (should be `gcp-secmon-lab-kud01`).
+
+❌ **Empty result?** Most likely the project has just been quiet. `--freshness=24h` only shows the last 24 hours — if you haven't done anything in the project today, widen the window:
+
+```bash
+gcloud logging read 'logName:"cloudaudit.googleapis.com%2Factivity"' \
+  --limit=5 --freshness=30d \
+  --format="table(timestamp, protoPayload.authenticationInfo.principalEmail, protoPayload.methodName)"
+```
+
+Empty here too → confirm the active project: `gcloud config get-value project` (should be `gcp-secmon-lab-kud01`). Note: "no results" usually means your **time filter** excluded the logs, not that logging is off.
 
 ---
 
