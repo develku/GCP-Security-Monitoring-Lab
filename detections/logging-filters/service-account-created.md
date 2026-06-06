@@ -43,6 +43,15 @@ gcloud logging read \
 | `protoPayload.response.email` | The **new** service account's identity |
 | `protoPayload.requestMetadata.callerIp` | Source IP of the actor |
 
+## 📖 Reading the filter
+
+Single condition (see [concepts §3](../../docs/01-concepts.md#3-service-accounts--keys)):
+
+- `logName:"…activity"` — Admin Activity stream.
+- `protoPayload.methodName="google.iam.admin.v1.CreateServiceAccount"` — a new service-account identity was created.
+
+Low severity on its own — its real value is **correlation** (see the persistence-chain link in Tuning notes): SA created → role granted → key created, same actor, short window.
+
 ## Tuning notes
 
 - **False positives:** Terraform/CI provisioning legitimately creates service accounts. Allow-list automation `principalEmail`s; alert on human-created (`user:`) ones.

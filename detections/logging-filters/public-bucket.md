@@ -62,6 +62,15 @@ gcloud logging read \
 | `protoPayload.serviceData.policyDelta.bindingDeltas.member` | The public principal that was granted |
 | `protoPayload.serviceData.policyDelta.bindingDeltas.role` | What access level (e.g. `roles/storage.objectViewer`) |
 
+## 📖 Reading the filter
+
+(See [concepts §2](../../docs/01-concepts.md#2-identity--iam-identity-and-access-management) for `allUsers`):
+
+- `logName:"…data_access"` — the **Data Access** stream, *not* Admin Activity. This is why you enabled it in doc 02; without that, this detection sees nothing.
+- `protoPayload.methodName="storage.setIamPermissions"` — a bucket IAM change.
+- `member="allUsers" OR "allAuthenticatedUsers"` — the two special members that mean "public".
+- `action="ADD"` — access was *granted* (not revoked).
+
 ## Tuning notes
 
 - **False positives:** intentionally public buckets (static website hosting, public datasets). Allow-list known-public bucket names.

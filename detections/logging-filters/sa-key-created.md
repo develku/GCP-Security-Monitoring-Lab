@@ -50,6 +50,15 @@ gcloud logging read \
 | `protoPayload.request.name` / `protoPayload.resourceName` | **Which** service account was targeted |
 | `protoPayload.requestMetadata.callerIp` | Source IP of the actor |
 
+## 📖 Reading the filter
+
+Two lines, deliberately (see [concepts §3](../../docs/01-concepts.md#3-service-accounts--keys)):
+
+- `logName:"…activity"` — the **Admin Activity** stream.
+- `protoPayload.methodName="google.iam.admin.v1.CreateServiceAccountKey"` — the exact call that mints a downloadable key.
+
+No extra conditions, because key creation is rare and uniformly suspicious — here, *more* coverage is the right call. The optional negation line only removes a known CI/automation account.
+
 ## Tuning notes
 
 - **False positives:** CI/CD or Terraform provisioning that legitimately rotates keys. Allow-list known automation `principalEmail`s.

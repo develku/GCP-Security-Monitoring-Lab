@@ -54,6 +54,17 @@ gcloud logging read \
 | `protoPayload.serviceData.policyDelta.bindingDeltas.member` | **To whom** the role was granted |
 | `protoPayload.requestMetadata.callerIp` | Source IP of the actor |
 
+## 📖 Reading the filter
+
+Each line narrows the search (see [concepts §4](../../docs/01-concepts.md#4-audit-logs--the-socs-raw-material) for the fields):
+
+- `logName:"…activity"` — only the **Admin Activity** stream (free, always on).
+- `protoPayload.methodName="SetIamPolicy"` — only IAM-policy changes.
+- `bindingDeltas.action="ADD"` — only *additions* of access (ignore removals).
+- `role="roles/owner" OR "roles/editor"` — only the broad **primitive** roles worth alarming on.
+
+Drop the last line and you'd catch *every* IAM change — more coverage, far more noise. Keeping it is the coverage-vs-noise tradeoff in action.
+
 ## Tuning notes
 
 - **False positives:** legitimate admin onboarding, Terraform/CI service accounts applying IAM. Allow-list known automation `principalEmail`s.

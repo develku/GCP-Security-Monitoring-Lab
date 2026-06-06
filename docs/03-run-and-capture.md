@@ -34,6 +34,8 @@ For each hero detection you'll: **(a)** run the sim → **(b)** wait 1–2 min f
 
 ### 🦸 HERO 1 — IAM role granted (T1098.003)
 
+> 📖 **The attack:** the sim grants `roles/editor` to the test service account. In a real breach, an attacker who compromised one identity grants themselves (or a SA they control) a broad **primitive role** — instant privilege escalation that persists until someone notices. The detection watches `SetIamPolicy` for added owner/editor bindings. ([concepts §2](01-concepts.md#2-identity--iam-identity-and-access-management))
+
 **(a) Run the attack:**
 ```bash
 ./scripts/simulate/sim-iam-role-granted.sh
@@ -69,6 +71,8 @@ Expect a row showing your email + `roles/editor`. **That's the detection working
 
 ### 🦸 HERO 2 — Service account key created (T1098.001)
 
+> 📖 **The attack:** the sim creates a downloadable JSON key for the test SA. That key is a long-lived credential usable from anywhere, surviving password resets and session revocation — classic credential theft + persistence. The detection watches for the `CreateServiceAccountKey` call. ([concepts §3](01-concepts.md#3-service-accounts--keys))
+
 **(a)** `./scripts/simulate/sim-sa-key-created.sh` → expect `[+] Created key for … keys/secmon-test-sa-key.json`
 
 **(b)** Wait ~1–2 min.
@@ -91,6 +95,8 @@ protoPayload.methodName="google.iam.admin.v1.CreateServiceAccountKey"
 ---
 
 ### 🦸 HERO 3 — Storage bucket made public (T1530)
+
+> 📖 **The attack:** the sim grants `allUsers` read access to a test bucket — exposing it to the entire internet, one of the most common causes of cloud data breaches. The detection watches the **Data Access** log for `storage.setIamPermissions` granting `allUsers`. (This is the one detection needing Data Access logging — doc 02 Step 2.) ([concepts §2](01-concepts.md#2-identity--iam-identity-and-access-management))
 
 **(a)** `./scripts/simulate/sim-public-bucket.sh` → expect `[!] gs://secmon-test-bucket-… is now PUBLIC`
 

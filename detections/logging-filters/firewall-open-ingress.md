@@ -49,6 +49,14 @@ gcloud logging read \
 | `protoPayload.request.sourceRanges` | The exposed source range (`0.0.0.0/0` = entire internet) |
 | `protoPayload.request.alloweds.ports` | Which ports were opened (22/3389 = critical) |
 
+## 📖 Reading the filter
+
+- `logName:"…activity"` — Admin Activity stream.
+- `protoPayload.methodName:"compute.firewalls.insert"` — note the `:` (substring match), so it catches versioned names like `v1.compute.firewalls.insert`. (Compare `=` = exact match, used elsewhere.)
+- `protoPayload.request.sourceRanges="0.0.0.0/0"` — the rule allows traffic from the **entire internet**.
+
+The `:` vs `=` distinction is worth remembering — substring match is how you stay robust to GCP's versioned method names.
+
 ## Tuning notes
 
 - **Escalate** when opened ports include `22` (SSH) or `3389` (RDP) — management access to the world.

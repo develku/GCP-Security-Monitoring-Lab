@@ -52,6 +52,15 @@ gcloud logging read \
 | `protoPayload.serviceData.policyDelta.auditConfigDeltas.service` | Which service's logging changed (`allServices` = everything) |
 | `protoPayload.serviceData.policyDelta.auditConfigDeltas.logType` | `ADMIN_READ` / `DATA_READ` / `DATA_WRITE` |
 
+## 📖 Reading the filter
+
+(See [concepts §4](../../docs/01-concepts.md#4-audit-logs--the-socs-raw-material)):
+
+- `logName:"…activity"` — Admin Activity, which **cannot be disabled** — so the act of tampering is always recorded, even as the attacker tries to go dark.
+- `protoPayload.methodName="SetIamPolicy"` — audit-config changes ride on this call.
+- `…auditConfigDeltas:*` — the entry *contains* an audit-config change (`:*` means "this field exists").
+- optional `…action="REMOVE"` — narrows to logging being *turned off* (the dangerous case vs. just adding logging).
+
 ## Tuning notes
 
 - **Severity escalation:** `service="allServices"` with `action="REMOVE"` is a near-certain incident — treat as Critical, page immediately.
