@@ -1,0 +1,141 @@
+# 03 — Run the Lab & Capture Evidence
+
+**Goal:** trigger 3 attacks, watch each detection catch them, and screenshot the proof. ~20 minutes.
+
+> 💰 **Cost & safety:** every attack creates a disposable `secmon-test-*` resource (a test service account, a key, a public bucket). They cost ~nothing, but **run `scripts/teardown.sh` at the end** (Step 5) so nothing is left exposed.
+
+Run everything from the repo folder:
+
+```bash
+cd "/Users/kud/Library/Mobile Documents/com~apple~CloudDocs/Programming/github_repo/GCP-Security-Monitoring-Lab"
+```
+
+---
+
+## Step 0 — Create the test identity
+
+The first two attacks act on a test service account, so create it first:
+
+```bash
+./scripts/simulate/sim-sa-created.sh
+```
+
+**You should see:**
+```
+[+] Created service account: secmon-test-sa@gcp-secmon-lab-kud01.iam.gserviceaccount.com
+    Triggers T1136.003 — see detections/logging-filters/service-account-created.md
+```
+
+---
+
+## How each attack works (the pattern, repeated 3×)
+
+For each hero detection you'll: **(a)** run the sim → **(b)** wait 1–2 min for logs → **(c)** confirm via CLI → **(d)** screenshot in the console.
+
+### 🦸 HERO 1 — IAM role granted (T1098.003)
+
+**(a) Run the attack:**
+```bash
+./scripts/simulate/sim-iam-role-granted.sh
+```
+Expect: `[+] Granted roles/editor to secmon-test-sa@…`
+
+**(b) Wait ~1–2 minutes** (logs take a moment to appear).
+
+**(c) Confirm via CLI:**
+```bash
+gcloud logging read \
+  'logName:"cloudaudit.googleapis.com%2Factivity"
+   protoPayload.methodName="SetIamPolicy"
+   protoPayload.serviceData.policyDelta.bindingDeltas.role="roles/editor"' \
+  --limit=3 --freshness=1h \
+  --format="table(timestamp, protoPayload.authenticationInfo.principalEmail, protoPayload.serviceData.policyDelta.bindingDeltas.role)"
+```
+Expect a row showing your email + `roles/editor`. **That's the detection working.**
+
+**(d) Screenshot in the console:**
+1. Open <https://console.cloud.google.com/logs/query?project=gcp-secmon-lab-kud01>
+2. Paste this into the query box and click **Run query**:
+   ```
+   logName:"cloudaudit.googleapis.com%2Factivity"
+   protoPayload.methodName="SetIamPolicy"
+   protoPayload.serviceData.policyDelta.bindingDeltas.role="roles/editor"
+   ```
+3. Click the matching log entry to expand it.
+4. Screenshot the **query box + the expanded entry** in one frame.
+5. Save as `screenshots/01-iam-role-granted.png`.
+
+---
+
+### 🦸 HERO 2 — Service account key created (T1098.001)
+
+**(a)** `./scripts/simulate/sim-sa-key-created.sh` → expect `[+] Created key for … keys/secmon-test-sa-key.json`
+
+**(b)** Wait ~1–2 min.
+
+**(c) Confirm via CLI:**
+```bash
+gcloud logging read \
+  'logName:"cloudaudit.googleapis.com%2Factivity"
+   protoPayload.methodName="google.iam.admin.v1.CreateServiceAccountKey"' \
+  --limit=3 --freshness=1h \
+  --format="table(timestamp, protoPayload.authenticationInfo.principalEmail, protoPayload.request.name)"
+```
+
+**(d) Screenshot:** same console URL, paste this filter, run, expand, capture, save as `screenshots/02-sa-key-created.png`:
+```
+logName:"cloudaudit.googleapis.com%2Factivity"
+protoPayload.methodName="google.iam.admin.v1.CreateServiceAccountKey"
+```
+
+---
+
+### 🦸 HERO 3 — Storage bucket made public (T1530)
+
+**(a)** `./scripts/simulate/sim-public-bucket.sh` → expect `[!] gs://secmon-test-bucket-… is now PUBLIC`
+
+**(b)** Wait ~1–2 min.
+
+**(c) Confirm via CLI:**
+```bash
+gcloud logging read \
+  'logName:"cloudaudit.googleapis.com%2Fdata_access"
+   protoPayload.methodName="storage.setIamPermissions"' \
+  --limit=3 --freshness=1h \
+  --format="table(timestamp, protoPayload.authenticationInfo.principalEmail, resource.labels.bucket_name)"
+```
+> If this is empty, you missed Step 2 in doc `02` (enabling Data Access logging for Storage). Enable it, re-run the sim, wait, try again.
+
+**(d) Screenshot:** console, paste this filter, run, expand, capture, save as `screenshots/03-public-bucket.png`:
+```
+logName:"cloudaudit.googleapis.com%2Fdata_access"
+protoPayload.methodName="storage.setIamPermissions"
+```
+
+---
+
+## 📸 Screenshot rules (for all 3)
+
+- Capture the **query/filter + the matching entry** together — proves the rule selects the event.
+- **Scrub before saving:** your `principalEmail` is your real Gmail — blur it if you prefer. Crop out the project number.
+- Save all three into the `screenshots/` folder with the names above.
+
+---
+
+## Step 5 — Tear down (don't skip)
+
+```bash
+./scripts/teardown.sh
+```
+**You should see** lines removing the firewall (if created), bucket, SA binding, service account, and the local key file. This returns the project to a clean, $0 state.
+
+---
+
+## ✅ Done — checklist
+
+- [ ] `screenshots/01-iam-role-granted.png`
+- [ ] `screenshots/02-sa-key-created.png`
+- [ ] `screenshots/03-public-bucket.png`
+- [ ] `teardown.sh` run — no test resources left
+
+**Next:** tell me when the 3 screenshots are saved — I'll wire them into the README, then we flip the repo to **public** and add your **CV line**.

@@ -51,7 +51,13 @@ scripts/      Setup + attack-simulation + teardown scripts
 
 ## Getting started
 
-Start with [`docs/00-prerequisites.md`](docs/00-prerequisites.md) — install the gcloud CLI, create a project, and set a budget alert before building anything.
+Follow the numbered guides in order:
+
+1. [`docs/00-prerequisites.md`](docs/00-prerequisites.md) — install gcloud, create a project, set a budget alert.
+2. [`docs/02-enable-audit-logging.md`](docs/02-enable-audit-logging.md) — turn on the audit logs the detections query.
+3. [`docs/03-run-and-capture.md`](docs/03-run-and-capture.md) — run the attack simulations and screenshot each detection firing.
+
+Evidence lands in [`screenshots/`](screenshots/).
 
 ## License
 
