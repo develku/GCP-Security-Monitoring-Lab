@@ -108,6 +108,16 @@ A **detection** turns raw logs into an alert. The craft:
 
 A good detection balances **coverage** (catches the real attack) against **noise** (doesn't fire on benign activity). That tradeoff — not the syntax — is the actual skill.
 
+### Why simulate attacks from your own (owner) account?
+
+A fair question: in this lab *you* run the "attacks", as the project owner. If you're the one doing it, what's the point?
+
+- **A detection matches the *event*, not *who you are*.** When you grant `roles/editor`, the audit log entry is **structurally identical** to one a real attacker would produce using stolen owner credentials. The filter fires on the event signature, not your intent. So triggering it yourself generates real telemetry that proves: *if this happens in production, my rule catches it.* That's **detection validation** (a.k.a. purple teaming) — you're testing the sensor, not pretending to be a hacker.
+- **Running as a privileged account is the realistic case.** The most common cloud breach pattern is a **compromised privileged identity** — an attacker phishes an admin, steals a key, or hijacks a session, then operates *as* that legitimate account. "The owner grants editor to a new principal" isn't unrealistic; it's the textbook compromised-admin attack. Detections also catch **insider threats and honest mistakes** — surfacing risky actions regardless of malice.
+- **Production adds a judgment layer (tuning).** In the lab every actor is "expected" (it's you). In production you allow-list known admins/automation and alert on **anomalies** — an editor grant from an unusual IP, at an odd hour, to an unknown service account. The raw rule catches the event; tuning decides when it's worth waking someone up (see each detection's *Tuning notes*).
+
+**Bottom line:** a detection you've never triggered is a guess; one you've triggered and watched fire is validated. The simulation is how you turn "I think this works" into evidence.
+
 ---
 
 **Next:** **[02 — Enable Audit Logging](02-enable-audit-logging.md)** — put section 4 into practice.
