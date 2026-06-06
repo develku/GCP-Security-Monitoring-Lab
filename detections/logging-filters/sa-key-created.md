@@ -17,10 +17,29 @@ The IAM API records a distinct method when a key is minted. You'll match on that
 
 ## Cloud Logging filter (Log Explorer)
 
-<!-- TODO(human): write the Cloud Logging filter for this detection.
-     Replace this comment block with a fenced ```...``` code block containing the filter,
-     following the same shape as detections/logging-filters/iam-role-granted.md.
-     See the Learn by Doing guidance for the exact methodName and the fields to surface. -->
+```
+logName:"cloudaudit.googleapis.com%2Factivity"
+protoPayload.methodName="google.iam.admin.v1.CreateServiceAccountKey"
+```
+
+A deliberately tight two-liner: key creation is rare and uniformly suspicious, so we match every occurrence and triage in review rather than pre-filtering. To suppress a known automation account, add a negation line:
+
+```
+protoPayload.authenticationInfo.principalEmail!="ci-deployer@PROJECT_ID.iam.gserviceaccount.com"
+```
+
+## Run it from the CLI
+
+```bash
+gcloud logging read \
+  'logName:"cloudaudit.googleapis.com%2Factivity"
+   protoPayload.methodName="google.iam.admin.v1.CreateServiceAccountKey"' \
+  --limit=10 --freshness=24h \
+  --format="table(timestamp,
+    protoPayload.authenticationInfo.principalEmail,
+    protoPayload.request.name,
+    protoPayload.requestMetadata.callerIp)"
+```
 
 ## Key fields
 
