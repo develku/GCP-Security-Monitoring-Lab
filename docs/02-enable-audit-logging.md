@@ -2,6 +2,8 @@
 
 **Goal of this doc:** confirm logging works, then turn on the one extra log stream a single detection needs. ~5 minutes.
 
+> 📖 **Study first:** this doc applies [§4 of `01-concepts.md`](01-concepts.md#4-audit-logs--the-socs-raw-material) (audit logs + log-entry anatomy). If a field name below looks unfamiliar, that section explains it.
+
 Run every command from the repo folder:
 
 ```bash
@@ -33,6 +35,13 @@ gcloud logging read 'logName:"cloudaudit.googleapis.com%2Factivity"' \
 
 **This does:** reads your audit log (read-only — changes nothing).
 
+> 📖 **What you're looking at — read each column:**
+> - `TIMESTAMP` — when the action happened.
+> - `PRINCIPAL_EMAIL` (`protoPayload.authenticationInfo.principalEmail`) — **who** did it.
+> - `METHOD_NAME` (`protoPayload.methodName`) — **the API call they made**. This is the field every detection keys off. `SetIamPolicy` = an IAM change; `EnableService` = an API was turned on.
+>
+> A detection is nothing more than: "show me log entries where `methodName` = *(a suspicious call)* and *(some field)* = *(a bad value)*." Once you can read this table, you can read every detection in this lab.
+
 **You should see** a small table of your recent actions:
 
 ```
@@ -62,6 +71,10 @@ Empty here too → confirm the active project: `gcloud config get-value project`
 ```
 
 **This does:** turns on `ADMIN_WRITE` Data Access logging for Cloud Storage, so the public-bucket detection can fire. (It does **not** enable per-object read logging — that would be costly.)
+
+> 📖 **Why this step exists — and a security lesson:** Cloud Storage IAM changes (like making a bucket public) are recorded in the **Data Access** stream, which is off by default ([§4](01-concepts.md#4-audit-logs--the-socs-raw-material)). So we turn it on — but only `ADMIN_WRITE` (config changes), never `DATA_READ`/`DATA_WRITE` (every file access = huge log volume = real cost). **The lesson:** logging is a cost/visibility tradeoff. You enable exactly the streams a detection needs, no more.
+>
+> Notice the symmetry: this script *enables* logging by editing the project's `auditConfigs`; an attacker would *disable* logging the same way — which is precisely what detection [`audit-config-changed`](../detections/logging-filters/audit-config-changed.md) catches. **The thing you harden is the thing they attack.**
 
 **You should see:**
 
