@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Simulates: Cloud Storage bucket made public  (MITRE T1530)
 # Detection:  detections/logging-filters/public-bucket.md
-# NOTE: detection requires Data Access logging enabled for storage
-#       (scripts/setup/03-enable-audit-logs.sh). The action still happens without it.
+# Detection uses the always-on Admin Activity log (bucket-IAM changes are config
+# writes), so no logging setup is required.
 # Safe: empty test bucket, no data. Removed by scripts/teardown.sh.
 set -euo pipefail
 

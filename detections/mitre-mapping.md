@@ -7,7 +7,7 @@ Each detection in this lab maps to a technique in the [MITRE ATT&CK Cloud matrix
 | [IAM role granted](logging-filters/iam-role-granted.md) | [T1098.003](https://attack.mitre.org/techniques/T1098/003/) — Additional Cloud Roles | Privilege Escalation / Persistence | Admin Activity |
 | [Service account created](logging-filters/service-account-created.md) | [T1136.003](https://attack.mitre.org/techniques/T1136/003/) — Create Account: Cloud Account | Persistence | Admin Activity |
 | [SA key created](logging-filters/sa-key-created.md) | [T1098.001](https://attack.mitre.org/techniques/T1098/001/) — Additional Cloud Credentials | Persistence | Admin Activity |
-| [Bucket made public](logging-filters/public-bucket.md) | [T1530](https://attack.mitre.org/techniques/T1530/) — Data from Cloud Storage | Collection / Exfiltration | Data Access (opt-in) |
+| [Bucket made public](logging-filters/public-bucket.md) | [T1530](https://attack.mitre.org/techniques/T1530/) — Data from Cloud Storage | Collection / Exfiltration | Admin Activity |
 | [Firewall opened](logging-filters/firewall-open-ingress.md) | [T1562.007](https://attack.mitre.org/techniques/T1562/007/) — Disable/Modify Cloud Firewall | Defense Evasion | Admin Activity |
 | [Audit logging disabled](logging-filters/audit-config-changed.md) | [T1562.008](https://attack.mitre.org/techniques/T1562/008/) — Disable/Modify Cloud Logs | Defense Evasion | Admin Activity |
 

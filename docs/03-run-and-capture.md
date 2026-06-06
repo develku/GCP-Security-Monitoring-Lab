@@ -96,7 +96,7 @@ protoPayload.methodName="google.iam.admin.v1.CreateServiceAccountKey"
 
 ### 🦸 HERO 3 — Storage bucket made public (T1530)
 
-> 📖 **The attack:** the sim grants `allUsers` read access to a test bucket — exposing it to the entire internet, one of the most common causes of cloud data breaches. The detection watches the **Data Access** log for `storage.setIamPermissions` granting `allUsers`. (This is the one detection needing Data Access logging — doc 02 Step 2.) ([concepts §2](01-concepts.md#2-identity--iam-identity-and-access-management))
+> 📖 **The attack:** the sim grants `allUsers` read access to a test bucket — exposing it to the entire internet, one of the most common causes of cloud data breaches. The detection watches the **Admin Activity** log for `storage.setIamPermissions` (bucket-IAM changes are config writes, so they're logged for free — no extra setup). ([concepts §2](01-concepts.md#2-identity--iam-identity-and-access-management))
 
 **(a)** `./scripts/simulate/sim-public-bucket.sh` → expect `[!] gs://secmon-test-bucket-… is now PUBLIC`
 
@@ -105,16 +105,16 @@ protoPayload.methodName="google.iam.admin.v1.CreateServiceAccountKey"
 **(c) Confirm via CLI:**
 ```bash
 gcloud logging read \
-  'logName:"cloudaudit.googleapis.com%2Fdata_access"
+  'logName:"cloudaudit.googleapis.com%2Factivity"
    protoPayload.methodName="storage.setIamPermissions"' \
   --limit=3 --freshness=1h \
   --format="table(timestamp, protoPayload.authenticationInfo.principalEmail, resource.labels.bucket_name)"
 ```
-> If this is empty, you missed Step 2 in doc `02` (enabling Data Access logging for Storage). Enable it, re-run the sim, wait, try again.
+> If this is empty, wait another minute (logs can lag) and re-run — bucket-IAM changes are in the always-on Admin Activity log, so there's no logging setup to miss.
 
 **(d) Screenshot:** console, paste this filter, run, expand, capture, save as `screenshots/03-public-bucket.png`:
 ```
-logName:"cloudaudit.googleapis.com%2Fdata_access"
+logName:"cloudaudit.googleapis.com%2Factivity"
 protoPayload.methodName="storage.setIamPermissions"
 ```
 

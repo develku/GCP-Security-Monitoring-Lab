@@ -3,21 +3,9 @@
 | | |
 |---|---|
 | **MITRE ATT&CK** | [T1530 — Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/) |
-| **Audit log** | **Data Access** (⚠️ opt-in — see prerequisite) |
+| **Audit log** | Admin Activity (always on, free) |
 | **Severity** | High (data exposure / exfiltration) |
 | **Simulation** | [`scripts/simulate/sim-public-bucket.sh`](../../scripts/simulate/sim-public-bucket.sh) |
-
-## ⚠️ Prerequisite — enable Data Access logging for Storage
-
-Unlike the other detections, Cloud Storage IAM changes are recorded in **Data Access** audit logs, which are **off by default**. Enable `ADMIN_WRITE` for Cloud Storage (low volume — this is config activity, not object reads):
-
-```bash
-# Add to your audit config (see docs/02-enable-audit-logging.md):
-#   service: storage.googleapis.com
-#   auditLogConfigs: { logType: ADMIN_WRITE }
-```
-
-> Do **not** enable `DATA_READ`/`DATA_WRITE` for Storage in this lab — those log every object access and can get expensive. `ADMIN_WRITE` captures IAM/config changes only.
 
 ## Why this matters
 
@@ -25,32 +13,28 @@ Granting `allUsers` or `allAuthenticatedUsers` on a bucket exposes its objects t
 
 ## The signal
 
-- `methodName = storage.setIamPermissions`
-- a binding added for the special members `allUsers` or `allAuthenticatedUsers`
+- `methodName = storage.setIamPermissions` — a bucket IAM change. Because changing IAM is an admin/config write, Cloud Storage records it in the **Admin Activity** log (always on, free — no setup needed).
+- the entry contains a binding for the special members `allUsers` or `allAuthenticatedUsers`.
 
 ## Cloud Logging filter (Log Explorer)
 
 ```
-logName:"cloudaudit.googleapis.com%2Fdata_access"
+logName:"cloudaudit.googleapis.com%2Factivity"
 protoPayload.methodName="storage.setIamPermissions"
-(protoPayload.serviceData.policyDelta.bindingDeltas.member="allUsers" OR
- protoPayload.serviceData.policyDelta.bindingDeltas.member="allAuthenticatedUsers")
-protoPayload.serviceData.policyDelta.bindingDeltas.action="ADD"
 ```
+
+This catches every bucket IAM change — then you confirm the public grant by inspecting the entry (see "Reading the filter" for how to tighten it).
 
 ## Run it from the CLI
 
 ```bash
 gcloud logging read \
-  'logName:"cloudaudit.googleapis.com%2Fdata_access"
-   protoPayload.methodName="storage.setIamPermissions"
-   (protoPayload.serviceData.policyDelta.bindingDeltas.member="allUsers" OR
-    protoPayload.serviceData.policyDelta.bindingDeltas.member="allAuthenticatedUsers")' \
+  'logName:"cloudaudit.googleapis.com%2Factivity"
+   protoPayload.methodName="storage.setIamPermissions"' \
   --limit=10 --freshness=24h \
   --format="table(timestamp,
     protoPayload.authenticationInfo.principalEmail,
-    resource.labels.bucket_name,
-    protoPayload.serviceData.policyDelta.bindingDeltas.member)"
+    resource.labels.bucket_name)"
 ```
 
 ## Key fields
@@ -59,17 +43,17 @@ gcloud logging read \
 |---|---|
 | `protoPayload.authenticationInfo.principalEmail` | **Who** changed the bucket policy |
 | `resource.labels.bucket_name` | **Which** bucket was exposed |
-| `protoPayload.serviceData.policyDelta.bindingDeltas.member` | The public principal that was granted |
-| `protoPayload.serviceData.policyDelta.bindingDeltas.role` | What access level (e.g. `roles/storage.objectViewer`) |
+| `protoPayload.methodName` | The IAM-change call (`storage.setIamPermissions`) |
+| `protoPayload.requestMetadata.callerIp` | Source IP of the actor |
 
 ## 📖 Reading the filter
 
 (See [concepts §2](../../docs/01-concepts.md#2-identity--iam-identity-and-access-management) for `allUsers`):
 
-- `logName:"…data_access"` — the **Data Access** stream, *not* Admin Activity. This is why you enabled it in doc 02; without that, this detection sees nothing.
+- `logName:"…activity"` — the **Admin Activity** stream. Bucket IAM changes are config writes, so they land here automatically — no Data Access opt-in required.
 - `protoPayload.methodName="storage.setIamPermissions"` — a bucket IAM change.
-- `member="allUsers" OR "allAuthenticatedUsers"` — the two special members that mean "public".
-- `action="ADD"` — access was *granted* (not revoked).
+
+**Tightening to public-only:** the special members (`allUsers`/`allAuthenticatedUsers`) appear inside the log entry's binding data. Matching on `methodName` alone catches *all* bucket IAM changes (more coverage, some noise); to focus on public grants, expand the matched entry in Log Explorer and confirm the `allUsers` member, or add a `protoPayload.request` member condition once you've inspected your entry's exact shape.
 
 ## Tuning notes
 
