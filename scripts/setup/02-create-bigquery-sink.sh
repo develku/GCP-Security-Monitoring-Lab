@@ -25,10 +25,20 @@ gcloud logging sinks create "${SINK}" \
 
 echo "[*] Granting the sink's writer identity permission to write to BigQuery…"
 SINK_SA="$(gcloud logging sinks describe "${SINK}" --format='value(writerIdentity)')"
-gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
-  --member="${SINK_SA}" \
-  --role="roles/bigquery.dataEditor" \
-  --condition=None >/dev/null
+# The sink's writer identity is a Google-managed service agent that is eventually
+# consistent — it may not exist yet immediately after sink creation. Retry.
+granted=false
+for attempt in 1 2 3 4 5 6; do
+  if gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+       --member="${SINK_SA}" \
+       --role="roles/bigquery.dataEditor" \
+       --condition=None >/dev/null 2>&1; then
+    granted=true; break
+  fi
+  echo "    writer identity not provisioned yet — retrying in 5s (${attempt}/6)…"
+  sleep 5
+done
+[ "$granted" = true ] || { echo "[!] Grant failed after retries. Just re-run this script." >&2; exit 1; }
 
 echo "[+] Done. New Admin Activity logs now flow into:"
 echo "    ${PROJECT_ID}.${DATASET}.cloudaudit_googleapis_com_activity"
