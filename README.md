@@ -66,8 +66,6 @@ Each detection was validated by simulating the matching attack and confirming it
 
 ## Repository structure
 
-See [`PLAN.md`](PLAN.md) for the full implementation plan, phases, and success criteria.
-
 ```
 docs/         Numbered concepts + setup + walkthrough guides
 detections/   6 Logging filters + BigQuery SQL (correlation) + MITRE mapping
