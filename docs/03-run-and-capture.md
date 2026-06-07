@@ -160,13 +160,13 @@ Tearing down test resources in gcp-secmon-lab-kud01…
   [-] bucket gs://secmon-test-bucket-gcp-secmon-lab-kud01
 bindings:
 - members:
-  - serviceAccount:932465506700@cloudservices.gserviceaccount.com
+  - serviceAccount:123456789012@cloudservices.gserviceaccount.com
   role: roles/compute.instanceGroupManagerServiceAgent
 - members:
-  - serviceAccount:service-932465506700@compute-system.iam.gserviceaccount.com
+  - serviceAccount:service-123456789012@compute-system.iam.gserviceaccount.com
   role: roles/compute.serviceAgent
 - members:
-  - serviceAccount:932465506700-compute@developer.gserviceaccount.com
+  - serviceAccount:123456789012-compute@developer.gserviceaccount.com
   role: roles/editor
 - members:
   - user:you@example.com
