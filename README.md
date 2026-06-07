@@ -2,7 +2,9 @@
 
 > Cloud detection engineering on Google Cloud — the cloud-native mirror of an on-prem SIEM detection chain. Enable audit logging, write detection rules against the logs, then simulate the matching attacks to prove each rule fires.
 
-![Status](https://img.shields.io/badge/status-in%20progress-yellow)
+![Detections](https://img.shields.io/badge/detections-6-blue)
+![Evidenced](https://img.shields.io/badge/evidenced-3%2F6-success)
+![MITRE ATT&CK](https://img.shields.io/badge/MITRE%20ATT%26CK-Cloud%20matrix-blueviolet)
 ![Cloud](https://img.shields.io/badge/cloud-Google%20Cloud-blue)
 ![Cost](https://img.shields.io/badge/cost-free%20tier-green)
 
@@ -21,9 +23,9 @@
 ```
 gcloud CLI ──> GCP Project ──> Cloud Audit Logs (Admin Activity, free)
                                         │
-                                        ├──> Log Explorer filters  ── detection rules (MVP)
-                                        ├──> BigQuery sink          ── SQL detections (enhancement)
-                                        └──> Cloud Monitoring       ── alert policies
+                                        ├──> Log Explorer filters  ── 6 detection rules ✅
+                                        ├──> BigQuery sink          ── SQL detections (planned)
+                                        └──> Cloud Monitoring       ── alert policies (planned)
                                         ▲
               scripts/simulate/*.sh ────┘  (generate the malicious events to validate detections)
 ```
@@ -59,9 +61,10 @@ Each detection was validated by simulating the matching attack and confirming it
 See [`PLAN.md`](PLAN.md) for the full implementation plan, phases, and success criteria.
 
 ```
-docs/         Numbered setup + walkthrough guides
-detections/   Cloud Logging filters (+ BigQuery SQL, Sigma)
-scripts/      Setup + attack-simulation + teardown scripts
+docs/         Numbered concepts + setup + walkthrough guides
+detections/   6 Cloud Logging filters + MITRE ATT&CK mapping
+scripts/      Attack-simulation scripts + teardown
+screenshots/  Detection evidence
 ```
 
 ## Getting started
