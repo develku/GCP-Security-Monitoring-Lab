@@ -43,6 +43,16 @@ Open the BigQuery console: <https://console.cloud.google.com/bigquery?project=gc
 
 **Screenshot** the correlation query + its result → save as `screenshots/05-correlation-chain.png`.
 
+### Evidence
+
+Sanity query — the sink is live and the chain events landed in BigQuery (`actor` scrubbed):
+
+![BigQuery: recent-admin-activity query returning the chain events](../screenshots/05-bigquery-sanity.png)
+
+The correlation detection — **one actor, all 3 chain stages inside the window** (`distinct_steps: 3`, `span_minutes: 1`). No single filter can produce this row:
+
+![BigQuery: persistence-chain correlation query returning the offending actor](../screenshots/05-correlation-chain.png)
+
 ---
 
 ## Step 4 — Clean up (when fully done)
@@ -58,8 +68,8 @@ bq rm -r -f --dataset gcp-secmon-lab-kud01:secmon_logs
 
 ## ✅ Done — checklist
 
-- [ ] Sink created; logs flowing into `secmon_logs`
-- [ ] Chain sims run → rows present in BigQuery
-- [ ] Correlation query returns the actor → `screenshots/05-correlation-chain.png`
+- [x] Sink created; logs flowing into `secmon_logs`
+- [x] Chain sims run → rows present in BigQuery
+- [x] Correlation query returns the actor → `screenshots/05-correlation-chain.png`
 
 With this, the GCP lab demonstrates the full range: **single-event filters → live alerting → multi-event correlation.** That progression — from "match a thing" to "catch a sequence" — is exactly the detection-engineering maturity curve.

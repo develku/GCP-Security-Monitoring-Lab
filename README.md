@@ -61,6 +61,9 @@ Each detection was validated by simulating the matching attack and confirming it
 **Live alert (Cloud Monitoring)** — the IAM role-grant detection promoted to a log-based alert that fires **and emails** on match (see [`docs/04-alerting.md`](docs/04-alerting.md)):
 ![Cloud Monitoring alert email: Log alert fired, Critical](screenshots/04-alert-fired.png)
 
+**SQL correlation (T1136.003 → T1098.003 → T1098.001)** — a BigQuery query catches the *persistence chain*: one actor created a service account, granted a role, and minted a key within a 1-minute window (`distinct_steps: 3`). No single filter can produce this — see [`docs/05-bigquery-sql.md`](docs/05-bigquery-sql.md):
+![BigQuery correlation query detecting the persistence chain](screenshots/05-correlation-chain.png)
+
 ## Repository structure
 
 See [`PLAN.md`](PLAN.md) for the full implementation plan, phases, and success criteria.

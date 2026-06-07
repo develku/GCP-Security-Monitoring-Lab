@@ -17,3 +17,10 @@ Proof that each detection fires when its matching attack runs. Captured per [`do
 | `04-create-log-alert-menu.png` | Where to create the alert (Logs Explorer → Actions → Create log alert) |
 | `04-alert-fired.png` | The alert email — proof the policy fired and notified |
 | `04-alert-matched-log.png` | The matched log entry that triggered the alert |
+
+## SQL correlation evidence (docs/05)
+
+| File | Shows |
+|---|---|
+| `05-bigquery-sanity.png` | Sink working — recent admin-activity query returning the chain events in BigQuery |
+| `05-correlation-chain.png` | The persistence-chain correlation query catching the actor (`distinct_steps: 3`, `span_minutes: 1`) |
