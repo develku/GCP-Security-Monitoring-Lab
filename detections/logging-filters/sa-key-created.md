@@ -5,7 +5,7 @@
 | **MITRE ATT&CK** | [T1098.001 — Account Manipulation: Additional Cloud Credentials](https://attack.mitre.org/techniques/T1098/001/) |
 | **Audit log** | Admin Activity (always on, free) |
 | **Severity** | High (credential theft / persistence) |
-| **Simulation** | [`scripts/simulate/sim-sa-key-created.sh`](../../scripts/simulate/sim-sa-key-created.sh) |
+| **Simulation** | [`scripts/simulate/03-sim-sa-key-created.sh`](../../scripts/simulate/03-sim-sa-key-created.sh) |
 
 ## Why this matters
 

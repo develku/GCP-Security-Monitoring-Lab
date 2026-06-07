@@ -4,8 +4,16 @@ Proof that each detection fires when its matching attack runs. Captured per [`do
 
 | File | Detection | Attack simulated |
 |---|---|---|
-| `01-iam-role-granted.png` | IAM role granted (T1098.003) | `sim-iam-role-granted.sh` |
-| `02-sa-key-created.png` | SA key created (T1098.001) | `sim-sa-key-created.sh` |
-| `03-public-bucket.png` | Bucket made public (T1530) | `sim-public-bucket.sh` |
+| `01-iam-role-granted.png` | IAM role granted (T1098.003) | `02-sim-iam-role-granted.sh` |
+| `02-sa-key-created.png` | SA key created (T1098.001) | `03-sim-sa-key-created.sh` |
+| `03-public-bucket.png` | Bucket made public (T1530) | `04-sim-public-bucket.sh` |
 
 > Each shows the Log Explorer query + the matching log entry. Account identifiers are scrubbed.
+
+## Alerting evidence (docs/04)
+
+| File | Shows |
+|---|---|
+| `04-create-log-alert-menu.png` | Where to create the alert (Logs Explorer → Actions → Create log alert) |
+| `04-alert-fired.png` | The alert email — proof the policy fired and notified |
+| `04-alert-matched-log.png` | The matched log entry that triggered the alert |

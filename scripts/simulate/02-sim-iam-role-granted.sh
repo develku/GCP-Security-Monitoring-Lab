@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Simulates: IAM primitive role granted  (MITRE T1098.003)
 # Detection:  detections/logging-filters/iam-role-granted.md
-# Depends on: sim-sa-created.sh (grants editor to the test service account).
+# Depends on: 01-sim-sa-created.sh (grants editor to the test service account).
 # Retries to tolerate service-account creation propagation (IAM is eventually
 # consistent — a freshly created SA isn't usable in a binding for a few seconds).
 # Safe: revoked by scripts/teardown.sh.
@@ -27,7 +27,7 @@ if [ "$granted" = true ]; then
   echo "[+] Granted roles/editor to ${SA_EMAIL}"
   echo "    Triggers T1098.003 — see detections/logging-filters/iam-role-granted.md"
 else
-  echo "[!] Failed after retries. Confirm sim-sa-created.sh ran and the SA exists:" >&2
+  echo "[!] Failed after retries. Confirm 01-sim-sa-created.sh ran and the SA exists:" >&2
   echo "    gcloud iam service-accounts list --filter=email:secmon-test-sa" >&2
   exit 1
 fi

@@ -5,7 +5,7 @@
 | **MITRE ATT&CK** | [T1562.008 — Impair Defenses: Disable or Modify Cloud Logs](https://attack.mitre.org/techniques/T1562/008/) |
 | **Audit log** | Admin Activity (always on, free) |
 | **Severity** | Critical (defense evasion — attacker blinding the SOC) |
-| **Simulation** | [`scripts/simulate/sim-audit-config-changed.sh`](../../scripts/simulate/sim-audit-config-changed.sh) |
+| **Simulation** | [`scripts/simulate/06-sim-audit-config-changed.sh`](../../scripts/simulate/06-sim-audit-config-changed.sh) |
 
 ## Why this matters
 

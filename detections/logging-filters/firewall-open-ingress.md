@@ -5,7 +5,7 @@
 | **MITRE ATT&CK** | [T1562.007 — Impair Defenses: Disable or Modify Cloud Firewall](https://attack.mitre.org/techniques/T1562/007/) |
 | **Audit log** | Admin Activity (always on, free) |
 | **Severity** | High (attack-surface exposure / lateral movement enablement) |
-| **Simulation** | [`scripts/simulate/sim-firewall-open.sh`](../../scripts/simulate/sim-firewall-open.sh) |
+| **Simulation** | [`scripts/simulate/05-sim-firewall-open.sh`](../../scripts/simulate/05-sim-firewall-open.sh) |
 
 ## Why this matters
 

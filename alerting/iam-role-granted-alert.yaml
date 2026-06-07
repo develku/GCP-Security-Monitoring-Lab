@@ -2,7 +2,7 @@
 # (owner/editor) is granted at the project level. Maps to MITRE T1098.003.
 # The condition filter is the SAME logic as detections/logging-filters/iam-role-granted.md.
 #
-# Apply with scripts/setup/create-alert.sh (it substitutes CHANNEL_ID), or paste
+# Apply with scripts/setup/01-create-alert.sh (it substitutes CHANNEL_ID), or paste
 # the filter into Log Explorer and click "Create alert" (see docs/04-alerting.md).
 displayName: "IAM primitive role granted (T1098.003)"
 combiner: OR

@@ -37,12 +37,12 @@ GCP-Security-Monitoring-Lab/
 │   │   ├── 03-enable-audit-logs.sh  # Set IAM audit config policy
 │   │   └── 04-create-bigquery-sink.sh   # (Enhancement) log sink → BigQuery dataset
 │   ├── simulate/
-│   │   ├── sim-iam-role-granted.sh
-│   │   ├── sim-sa-key-created.sh
-│   │   ├── sim-public-bucket.sh
-│   │   ├── sim-audit-config-changed.sh
-│   │   ├── sim-firewall-open.sh
-│   │   └── sim-sa-created.sh
+│   │   ├── 02-sim-iam-role-granted.sh
+│   │   ├── 03-sim-sa-key-created.sh
+│   │   ├── 04-sim-public-bucket.sh
+│   │   ├── 06-sim-audit-config-changed.sh
+│   │   ├── 05-sim-firewall-open.sh
+│   │   └── 01-sim-sa-created.sh
 │   └── teardown.sh
 ├── detections/
 │   ├── logging-filters/             # Cloud Logging query syntax (Log Explorer) — MVP
@@ -138,12 +138,12 @@ Six core detections, each with a matching simulation. Logging-filter form is the
 
 | Step | Files | Description |
 |---|---|---|
-| 3.1 | `scripts/simulate/sim-iam-role-granted.sh` | Grant `roles/editor` to a throwaway test member |
-| 3.2 | `scripts/simulate/sim-sa-key-created.sh` | Create a key on a test service account |
-| 3.3 | `scripts/simulate/sim-public-bucket.sh` | Add `allUsers:objectViewer` to a test bucket |
-| 3.4 | `scripts/simulate/sim-audit-config-changed.sh` | Toggle an audit config off (then restore) |
-| 3.5 | `scripts/simulate/sim-firewall-open.sh` | Create a `0.0.0.0/0` ingress rule |
-| 3.6 | `scripts/simulate/sim-sa-created.sh` | Create a test service account |
+| 3.1 | `scripts/simulate/02-sim-iam-role-granted.sh` | Grant `roles/editor` to a throwaway test member |
+| 3.2 | `scripts/simulate/03-sim-sa-key-created.sh` | Create a key on a test service account |
+| 3.3 | `scripts/simulate/04-sim-public-bucket.sh` | Add `allUsers:objectViewer` to a test bucket |
+| 3.4 | `scripts/simulate/06-sim-audit-config-changed.sh` | Toggle an audit config off (then restore) |
+| 3.5 | `scripts/simulate/05-sim-firewall-open.sh` | Create a `0.0.0.0/0` ingress rule |
+| 3.6 | `scripts/simulate/01-sim-sa-created.sh` | Create a test service account |
 | 3.7 | `docs/06-attack-simulation.md` | Run each sim, screenshot the matching Log Explorer hit |
 
 ---

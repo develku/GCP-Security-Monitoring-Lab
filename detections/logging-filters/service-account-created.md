@@ -5,7 +5,7 @@
 | **MITRE ATT&CK** | [T1136.003 — Create Account: Cloud Account](https://attack.mitre.org/techniques/T1136/003/) |
 | **Audit log** | Admin Activity (always on, free) |
 | **Severity** | Medium (persistence — attacker-controlled identity) |
-| **Simulation** | [`scripts/simulate/sim-sa-created.sh`](../../scripts/simulate/sim-sa-created.sh) |
+| **Simulation** | [`scripts/simulate/01-sim-sa-created.sh`](../../scripts/simulate/01-sim-sa-created.sh) |
 
 ## Why this matters
 

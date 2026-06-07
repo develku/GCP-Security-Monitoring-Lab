@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Simulates: Service account key created  (MITRE T1098.001)
 # Detection:  detections/logging-filters/sa-key-created.md
-# Depends on: sim-sa-created.sh.
+# Depends on: 01-sim-sa-created.sh.
 # Safe: key is written to keys/ (gitignored) and deleted by scripts/teardown.sh.
 set -euo pipefail
 

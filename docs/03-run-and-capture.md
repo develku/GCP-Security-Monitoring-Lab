@@ -17,7 +17,7 @@ cd /path/to/GCP-Security-Monitoring-Lab   # the cloned repo folder
 The first two attacks act on a test service account, so create it first:
 
 ```bash
-./scripts/simulate/sim-sa-created.sh
+./scripts/simulate/01-sim-sa-created.sh
 ```
 
 **You should see:**
@@ -40,7 +40,7 @@ For each hero detection you'll: **(a)** run the sim → **(b)** wait 1–2 min f
 **(a) Run the attack:**
 
 ```bash
-./scripts/simulate/sim-iam-role-granted.sh
+./scripts/simulate/02-sim-iam-role-granted.sh
 ```
 
 Expect: `[+] Granted roles/editor to secmon-test-sa@…`
@@ -83,7 +83,7 @@ Expect a row showing your email + `roles/editor`. **That's the detection working
 
 > 📖 **The attack:** the sim creates a downloadable JSON key for the test SA. That key is a long-lived credential usable from anywhere, surviving password resets and session revocation — classic credential theft + persistence. The detection watches for the `CreateServiceAccountKey` call. ([concepts §3](01-concepts.md#3-service-accounts--keys))
 
-**(a)** `./scripts/simulate/sim-sa-key-created.sh` → expect `[+] Created key for … keys/secmon-test-sa-key.json`
+**(a)** `./scripts/simulate/03-sim-sa-key-created.sh` → expect `[+] Created key for … keys/secmon-test-sa-key.json`
 
 **(b)** Wait ~1–2 min.
 
@@ -112,7 +112,7 @@ protoPayload.methodName="google.iam.admin.v1.CreateServiceAccountKey"
 
 > 📖 **The attack:** the sim grants `allUsers` read access to a test bucket — exposing it to the entire internet, one of the most common causes of cloud data breaches. The detection watches the **Admin Activity** log for `storage.setIamPermissions` (bucket-IAM changes are config writes, so they're logged for free — no extra setup). ([concepts §2](01-concepts.md#2-identity--iam-identity-and-access-management))
 
-**(a)** `./scripts/simulate/sim-public-bucket.sh` → expect `[!] gs://secmon-test-bucket-… is now PUBLIC`
+**(a)** `./scripts/simulate/04-sim-public-bucket.sh` → expect `[!] gs://secmon-test-bucket-… is now PUBLIC`
 
 **(b)** Wait ~1–2 min.
 

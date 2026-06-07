@@ -5,7 +5,7 @@
 # Requires the alpha/beta gcloud components:
 #   gcloud components install beta alpha
 # Usage:
-#   ALERT_EMAIL="you@example.com" ./scripts/setup/create-alert.sh
+#   ALERT_EMAIL="you@example.com" ./scripts/setup/01-create-alert.sh
 set -euo pipefail
 
 : "${ALERT_EMAIL:?Set ALERT_EMAIL to the address that should receive alerts}"
@@ -26,5 +26,5 @@ sed "s|CHANNEL_ID|${CHANNEL_ID}|" alerting/iam-role-granted-alert.yaml > "$TMP"
 gcloud alpha monitoring policies create --policy-from-file="$TMP"
 
 echo "[+] Alert policy created in ${PROJECT_ID}."
-echo "    Trigger it: ./scripts/simulate/sim-sa-created.sh && ./scripts/simulate/sim-iam-role-granted.sh"
+echo "    Trigger it: ./scripts/simulate/01-sim-sa-created.sh && ./scripts/simulate/02-sim-iam-role-granted.sh"
 echo "    The alert fires and emails ${ALERT_EMAIL} within ~1-2 minutes."

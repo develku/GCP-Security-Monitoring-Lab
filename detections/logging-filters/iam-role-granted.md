@@ -5,7 +5,7 @@
 | **MITRE ATT&CK** | [T1098.003 — Account Manipulation: Additional Cloud Roles](https://attack.mitre.org/techniques/T1098/003/) |
 | **Audit log** | Admin Activity (always on, free) |
 | **Severity** | High (privilege escalation / persistence) |
-| **Simulation** | [`scripts/simulate/sim-iam-role-granted.sh`](../../scripts/simulate/sim-iam-role-granted.sh) |
+| **Simulation** | [`scripts/simulate/02-sim-iam-role-granted.sh`](../../scripts/simulate/02-sim-iam-role-granted.sh) |
 
 ## Why this matters
 

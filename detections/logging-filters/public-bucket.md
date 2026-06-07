@@ -5,7 +5,7 @@
 | **MITRE ATT&CK** | [T1530 — Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/) |
 | **Audit log** | Admin Activity (always on, free) |
 | **Severity** | High (data exposure / exfiltration) |
-| **Simulation** | [`scripts/simulate/sim-public-bucket.sh`](../../scripts/simulate/sim-public-bucket.sh) |
+| **Simulation** | [`scripts/simulate/04-sim-public-bucket.sh`](../../scripts/simulate/04-sim-public-bucket.sh) |
 
 ## Why this matters
 

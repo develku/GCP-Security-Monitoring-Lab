@@ -57,6 +57,9 @@ Each detection was validated by simulating the matching attack and confirming it
 **Storage bucket made public (T1530)** — `storage.setIamPermissions`:
 ![Public bucket exposure caught in Log Explorer](screenshots/03-public-bucket.png)
 
+**Live alert (Cloud Monitoring)** — the IAM role-grant detection promoted to a log-based alert that fires **and emails** on match (see [`docs/04-alerting.md`](docs/04-alerting.md)):
+![Cloud Monitoring alert email: Log alert fired, Critical](screenshots/04-alert-fired.png)
+
 ## Repository structure
 
 See [`PLAN.md`](PLAN.md) for the full implementation plan, phases, and success criteria.
