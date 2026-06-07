@@ -1,8 +1,8 @@
-# 05 — BigQuery SQL detections (catch the *chain*)
+# 05 — BigQuery SQL detections (catch the _chain_)
 
 Your 6 filters each catch one event. This doc adds the detection a filter **can't** express: a **correlation** — multiple events by the same actor in sequence. ~15 minutes.
 
-> 📖 **Study — why this needs SQL:** a Log Explorer filter matches *one* log entry. The persistence chain (`create SA → grant role → mint key`) is *three* events by one actor in a short window. To detect the **sequence** you must correlate events — `GROUP BY actor` + `HAVING` over a time window. That's SQL's job, not a filter's. This is the single most "senior" detection in the lab. ([concepts §6](01-concepts.md#6-detection-engineering--the-loop))
+> 📖 **Study — why this needs SQL:** a Log Explorer filter matches _one_ log entry. The persistence chain (`create SA → grant role → mint key`) is _three_ events by one actor in a short window. To detect the **sequence** you must correlate events — `GROUP BY actor` + `HAVING` over a time window. That's SQL's job, not a filter's. This is the single most "senior" detection in the lab. ([concepts §6](01-concepts.md#6-detection-engineering--the-loop))
 
 ---
 
@@ -17,7 +17,7 @@ cd /path/to/GCP-Security-Monitoring-Lab
 
 **This does:** enables BigQuery, makes the `secmon_logs` dataset, creates the sink (filtering to Admin Activity logs), and grants the sink permission to write. Free-tier friendly — lab volume is tiny.
 
-> ⚠️ **The sink captures from *now* forward** — it does not backfill old logs. So you must generate activity *after* creating it (Step 2).
+> ⚠️ **The sink captures from _now_ forward** — it does not backfill old logs. So you must generate activity _after_ creating it (Step 2).
 
 ## Step 2 — Generate activity (so there's data to query)
 
@@ -35,9 +35,9 @@ Run the persistence chain — these become the rows your correlation query will 
 
 Open the BigQuery console: <https://console.cloud.google.com/bigquery?project=gcp-secmon-lab-kud01>
 
-**(a) Sanity check** — paste [`detections/bigquery-sql/recent-admin-activity.sql`](../detections/bigquery-sql/recent-admin-activity.sql) and **Run**. You should see your recent `SetIamPolicy`, `CreateServiceAccount`, `CreateServiceAccountKey` rows. *(If empty, the logs haven't landed yet — wait and retry.)*
+**(a) Sanity check** — paste [`detections/bigquery-sql/recent-admin-activity.sql`](../detections/bigquery-sql/recent-admin-activity.sql) and **Run**. You should see your recent `SetIamPolicy`, `CreateServiceAccount`, `CreateServiceAccountKey` rows. _(If empty, the logs haven't landed yet — wait and retry.)_
 
-**(b) The correlation detection** — paste [`detections/bigquery-sql/correlation-persistence-chain.sql`](../detections/bigquery-sql/correlation-persistence-chain.sql) and **Run**. It returns **one row per actor** who did all three chain steps within 30 minutes — i.e. it caught the *sequence*, not just the individual events.
+**(b) The correlation detection** — paste [`detections/bigquery-sql/correlation-persistence-chain.sql`](../detections/bigquery-sql/correlation-persistence-chain.sql) and **Run**. It returns **one row per actor** who did all three chain steps within 30 minutes — i.e. it caught the _sequence_, not just the individual events.
 
 > CLI alternative: `bq query --use_legacy_sql=false < detections/bigquery-sql/correlation-persistence-chain.sql`
 
@@ -63,6 +63,18 @@ The sims' resources are removed by `./scripts/teardown.sh`. To remove the BigQue
 gcloud logging sinks delete secmon-bq-sink --quiet
 bq rm -r -f --dataset gcp-secmon-lab-kud01:secmon_logs
 ```
+
+**Expected output** — the `[-]` lines confirm each removal:
+
+```
+Tearing down test resources in PROJECT_ID…
+  [-] editor binding for test SA
+  [-] service account secmon-test-sa@PROJECT_ID.iam.gserviceaccount.com
+  [-] keys/secmon-test-sa-key.json
+Done.
+```
+
+> **Nuclear option:** to delete *everything* — the whole project — run `gcloud projects delete PROJECT_ID` (recoverable for ~30 days).
 
 ---
 
