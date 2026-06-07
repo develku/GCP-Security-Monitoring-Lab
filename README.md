@@ -16,6 +16,7 @@
 | Detection engineering | Cloud Logging filters mapped to MITRE ATT&CK ([`detections/`](detections/)) |
 | Attack simulation | Scripts that trigger each detection to validate it ([`scripts/simulate/`](scripts/simulate/)) |
 | Operational alerting | Log-based alert policy (as YAML) that fires + emails on a detection ([`alerting/`](alerting/), [`docs/04-alerting.md`](docs/04-alerting.md)) |
+| SQL correlation | Multi-event persistence-chain detection in BigQuery SQL — catches a *sequence* no filter can ([`detections/bigquery-sql/`](detections/bigquery-sql/), [`docs/05-bigquery-sql.md`](docs/05-bigquery-sql.md)) |
 | Cloud cost discipline | Free-tier-only design + budget alert + teardown ([`docs/00-prerequisites.md`](docs/00-prerequisites.md)) |
 | Secure-by-default repo | Credential-guarding `.gitignore`, no secrets in history |
 
@@ -25,7 +26,7 @@
 gcloud CLI ──> GCP Project ──> Cloud Audit Logs (Admin Activity, free)
                                         │
                                         ├──> Log Explorer filters  ── 6 detection rules ✅
-                                        ├──> BigQuery sink          ── SQL detections (planned)
+                                        ├──> BigQuery sink          ── SQL correlation ✅
                                         └──> Cloud Monitoring       ── log-based alert ✅
                                         ▲
               scripts/simulate/*.sh ────┘  (generate the malicious events to validate detections)
@@ -66,7 +67,7 @@ See [`PLAN.md`](PLAN.md) for the full implementation plan, phases, and success c
 
 ```
 docs/         Numbered concepts + setup + walkthrough guides
-detections/   6 Cloud Logging filters + MITRE ATT&CK mapping
+detections/   6 Logging filters + BigQuery SQL (correlation) + MITRE mapping
 alerting/     Log-based alert policy (Monitoring, as YAML)
 scripts/      Attack-simulation + alert-setup + teardown
 screenshots/  Detection + alert evidence
@@ -81,6 +82,7 @@ Follow the numbered guides in order:
 3. [`docs/02-enable-audit-logging.md`](docs/02-enable-audit-logging.md) — turn on the audit logs the detections query.
 4. [`docs/03-run-and-capture.md`](docs/03-run-and-capture.md) — run the attack simulations and screenshot each detection firing.
 5. [`docs/04-alerting.md`](docs/04-alerting.md) — turn a detection into a live alert that fires + emails on its own.
+6. [`docs/05-bigquery-sql.md`](docs/05-bigquery-sql.md) — route logs to BigQuery and write a SQL **correlation** detection (the persistence chain).
 
 Evidence lands in [`screenshots/`](screenshots/).
 
