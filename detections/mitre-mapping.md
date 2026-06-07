@@ -26,10 +26,10 @@ Same `principalEmail`, same short time window = an attacker building a durable, 
 
 | Detection | Filter written | Simulated | Screenshot evidence |
 |---|---|---|---|
-| IAM role granted | ✅ | ⬜ | ⬜ (hero) |
-| SA key created | ✅ | ⬜ | ⬜ (hero) |
-| Bucket made public | ✅ | ⬜ | ⬜ (hero) |
-| Service account created | ✅ | ⬜ | — documented |
+| IAM role granted | ✅ | ✅ | ✅ |
+| SA key created | ✅ | ✅ | ✅ |
+| Bucket made public | ✅ | ✅ | ✅ |
+| Service account created | ✅ | ✅ | — documented |
 | Firewall opened | ✅ | ⬜ | — documented |
 | Audit logging disabled | ✅ | ⬜ | — documented |
 

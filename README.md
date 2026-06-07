@@ -30,14 +30,29 @@ gcloud CLI ──> GCP Project ──> Cloud Audit Logs (Admin Activity, free)
 
 ## Detection coverage
 
-| # | Detection | MITRE ATT&CK (Cloud) | Status |
-|---|---|---|---|
-| 1 | IAM role granted (primitive roles) | T1098.003 | ✅ |
-| 2 | Service account key created | T1098.001 | 🚧 |
-| 3 | Storage bucket made public | T1530 | ⬜ |
-| 4 | Audit logging disabled | T1562.008 | ⬜ |
-| 5 | Firewall opened to internet | T1562.007 | ⬜ |
-| 6 | Service account created | T1136.003 | ⬜ |
+| # | Detection | MITRE ATT&CK (Cloud) | Filter | Evidence |
+|---|---|---|---|---|
+| 1 | [IAM role granted (primitive roles)](detections/logging-filters/iam-role-granted.md) | T1098.003 | ✅ | ✅ [screenshot](screenshots/01-iam-role-granted.png) |
+| 2 | [Service account key created](detections/logging-filters/sa-key-created.md) | T1098.001 | ✅ | ✅ [screenshot](screenshots/02-sa-key-created.png) |
+| 3 | [Storage bucket made public](detections/logging-filters/public-bucket.md) | T1530 | ✅ | ✅ [screenshot](screenshots/03-public-bucket.png) |
+| 4 | [Audit logging disabled](detections/logging-filters/audit-config-changed.md) | T1562.008 | ✅ | validated locally |
+| 5 | [Firewall opened to internet](detections/logging-filters/firewall-open-ingress.md) | T1562.007 | ✅ | validated locally |
+| 6 | [Service account created](detections/logging-filters/service-account-created.md) | T1136.003 | ✅ | validated locally |
+
+All six detections query the always-on, free **Admin Activity** audit log. See [`detections/mitre-mapping.md`](detections/mitre-mapping.md) for the full ATT&CK coverage + the correlation chain.
+
+## Evidence
+
+Each detection was validated by simulating the matching attack and confirming it fires (see [`docs/03-run-and-capture.md`](docs/03-run-and-capture.md)).
+
+**IAM role granted (T1098.003)** — `SetIamPolicy` adding `roles/editor`:
+![IAM role grant caught in Log Explorer](screenshots/01-iam-role-granted.png)
+
+**Service account key created (T1098.001)** — `CreateServiceAccountKey`:
+![SA key creation caught in Log Explorer](screenshots/02-sa-key-created.png)
+
+**Storage bucket made public (T1530)** — `storage.setIamPermissions`:
+![Public bucket exposure caught in Log Explorer](screenshots/03-public-bucket.png)
 
 ## Repository structure
 
