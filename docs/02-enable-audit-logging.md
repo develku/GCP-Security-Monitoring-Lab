@@ -7,7 +7,7 @@
 Run every command from the repo folder:
 
 ```bash
-cd "/Users/kud/Library/Mobile Documents/com~apple~CloudDocs/Programming/github_repo/GCP-Security-Monitoring-Lab"
+cd /path/to/GCP-Security-Monitoring-Lab   # the cloned repo folder
 ```
 
 ---
