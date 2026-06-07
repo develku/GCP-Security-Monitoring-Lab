@@ -78,10 +78,6 @@ Done.
 
 ---
 
-## ✅ Done — checklist
-
-- [x] Sink created; logs flowing into `secmon_logs`
-- [x] Chain sims run → rows present in BigQuery
-- [x] Correlation query returns the actor → `screenshots/05-correlation-chain.png`
+With this, the lab spans the full range: **single-event filters → live alerting → multi-event correlation** — the detection-engineering maturity curve.
 
 With this, the GCP lab demonstrates the full range: **single-event filters → live alerting → multi-event correlation.** That progression — from "match a thing" to "catch a sequence" — is exactly the detection-engineering maturity curve.

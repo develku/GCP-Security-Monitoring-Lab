@@ -104,11 +104,4 @@ gcloud billing budgets create \
 - **Never commit account-specific identifiers.** Billing account IDs, project numbers, and org IDs are kept as `XXXXXX-…` placeholders in this repo. Scrub them from any screenshot before publishing.
 - The `gcloud auth login` token under `~/.config/gcloud/` is a live credential — it is **not** part of this repo and must never be committed.
 
-## Done — you now have
-
-- [x] gcloud CLI installed and on PATH
-- [x] Authenticated account
-- [x] Dedicated lab project linked to billing
-- [x] Budget alert at 50 / 90 / 100%
-
-Next: **[01 — Project Setup & Audit Logging](01-project-setup.md)** — enable the audit logs that everything downstream detects against.
+Next: **[01 — Concepts](01-concepts.md)** — the ideas behind the lab (IAM, service accounts, audit logs, MITRE ATT&CK, detection engineering).

@@ -80,9 +80,4 @@ Operation "operations/acat.p2-...-..." finished successfully.
 
 ---
 
-## ✅ Done — checklist
-
-- [x] Step 1: saw a table of recent actions (Admin Activity works)
-- [x] Step 2: Compute API enabled
-
 **Next:** **[03 — Run the Lab & Capture Evidence](03-run-and-capture.md)** — trigger the attacks and screenshot the detections firing.

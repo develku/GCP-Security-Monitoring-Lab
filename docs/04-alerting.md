@@ -75,10 +75,6 @@ Then tear down: `./scripts/teardown.sh` (and delete the alert policy + channel i
 
 ---
 
-## ✅ Done — checklist
-
-- [x] Alert policy created
-- [x] Attack re-run → alert fired + email received
-- [x] Evidence captured (`screenshots/04-alert-fired.png`, `04-alert-matched-log.png`)
+This is the difference between a detection *rule* and a detection *that protects you* — with alerting, the lab covers the full loop: **log → detect → simulate → alert.**
 
 This is the difference between a detection *rule* and a detection *that protects you*. With this, the GCP lab covers the full loop: **log → detect → simulate → alert.**

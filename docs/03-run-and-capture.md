@@ -182,11 +182,4 @@ To remove EVERYTHING (the whole lab project): gcloud projects delete gcp-secmon-
 
 ---
 
-## ✅ Done — checklist
-
-- [x] `screenshots/01-iam-role-granted.png`
-- [x] `screenshots/02-sa-key-created.png`
-- [x] `screenshots/03-public-bucket.png`
-- [x] `teardown.sh` run — no test resources left (verified: SA + bucket gone)
-
 **Next:** [04 — Alerting](04-alerting.md) — turn a detection into a live alert that fires on its own.
